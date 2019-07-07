@@ -4,5 +4,5 @@ import java.util.Locale;
 
 public interface Scanner {
 	void setLocale(Locale locale);
-	Leger checkout(ShoppingCart cart);
+	Ledger checkout(ShoppingCart cart);
 }
