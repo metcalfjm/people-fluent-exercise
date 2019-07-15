@@ -1,6 +1,6 @@
 package com.zonelynux.peoplefluent;
 
 public interface Special {
-	float computeDiscount(int quantity);
+	Discount computeDiscount(int quantity);
 	InventoryItem getInventoryItem();
 }

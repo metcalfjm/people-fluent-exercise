@@ -17,6 +17,7 @@
 import com.zonelynux.peoplefluent.*
 import com.zonelynux.peoplefluent.special.BuyOneGetOneFreeSpecial
 import com.zonelynux.peoplefluent.special.ThreeForThePriceOfTwoSpecial
+import com.zonelynux.peoplefluent.special.MultiItemSpecialImpl
 
 import spock.lang.Specification
 
@@ -25,12 +26,16 @@ class ScannerImplSpec extends Specification {
 	def cart = new ShoppingCartImpl()
 	def scanner = new ScannerImpl()
 	def bogoApple = new BuyOneGetOneFreeSpecial()
+	def bogoBanana = new BuyOneGetOneFreeSpecial()
 	def tfpotOrange = new ThreeForThePriceOfTwoSpecial()
+	def mis = new MultiItemSpecialImpl()
 	def currencySymbol
 	
 	def setup() {
+		scanner = new ScannerImpl()
 		scanner.setLocale(Locale.UK)
 		bogoApple.setInventoryItem(InventoryItem.APPLE)
+		bogoBanana.setInventoryItem(InventoryItem.BANANA)
 		tfpotOrange.setInventoryItem(InventoryItem.ORANGE)
 		currencySymbol = "\u00A3" // British pound sterling symbol
 	}
@@ -202,5 +207,43 @@ class ScannerImplSpec extends Specification {
 		  
 		then:
 		  scanner.checkout(cart).displayBalance() == currencySymbol + "2.45"; // Three apples, one orange
+	}
+	
+	def "Buy 3 apples and 2 bananas and 1 orange and apply both BOGO specials"() {
+		when:
+		  cart.addItems(InventoryItem.APPLE, 3)
+		  cart.addItems(InventoryItem.BANANA, 2)
+		  cart.addItems(InventoryItem.ORANGE, 1)
+		  scanner.addSpecial(bogoApple);
+		  scanner.addSpecial(bogoBanana);
+		  
+		then:
+		  scanner.checkout(cart).displayBalance() == currencySymbol + "1.65"; // Three apples, one orange
+	}
+	
+	def "Buy 3 apples and 2 bananas and 1 orange and apply both BOGO specials and multi special"() {
+		when:
+		  cart.addItems(InventoryItem.APPLE, 3)
+		  cart.addItems(InventoryItem.BANANA, 2)
+		  cart.addItems(InventoryItem.ORANGE, 1)
+		  scanner.addSpecial(bogoApple);
+		  scanner.addSpecial(bogoBanana);
+		  scanner.setMultiItemSpecial(mis)
+		  
+		then:
+		  scanner.checkout(cart).displayBalance() == currencySymbol + "1.65"; // Three apples, one orange
+	}
+	
+	def "Buy 3 apples and 3 bananas and 1 orange and apply both BOGO specials and multi special"() {
+		when:
+		  cart.addItems(InventoryItem.APPLE, 3)
+		  cart.addItems(InventoryItem.BANANA, 3)
+		  cart.addItems(InventoryItem.ORANGE, 1)
+		  scanner.addSpecial(bogoApple);
+		  scanner.addSpecial(bogoBanana);
+		  scanner.setMultiItemSpecial(mis)
+		  
+		then:
+		  scanner.checkout(cart).displayBalance() == currencySymbol + "1.25"; // Three apples, one orange
 	}
 }  
