@@ -1,6 +1,6 @@
 package com.zonelynux.peoplefluent;
 
 public interface Discount {
-	float getDiscountedPrice();
+	float getDiscountedValue();
 	int getNonDiscountedItems();
 }

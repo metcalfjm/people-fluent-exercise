@@ -13,7 +13,7 @@ public class ScannerImpl implements Scanner {
 	
 	private Map<InventoryItem, Special> specials = new HashMap<>();
 	
-	private MultiItemSpecial mis;
+	private MultiItemSpecial multiItemSpecial;
 	
 	@Override
 	public void setLocale(Locale locale) {
@@ -27,15 +27,15 @@ public class ScannerImpl implements Scanner {
 	
 	@Override
 	public void setMultiItemSpecial(MultiItemSpecial special) {
-		this.mis = special;
+		this.multiItemSpecial = special;
 	}
 
 	
 	@Override
 	public Ledger checkout(ShoppingCart cart) {
 		final Ledger cl = new LedgerImpl();
-		List<ShoppingCart.Item> remaining = new ArrayList<>();
-		for (ShoppingCart.Item shoppingCartItem : cart) {
+		List<Item> fullPriceItems = new ArrayList<>();
+		for (Item shoppingCartItem : cart) {
 			InventoryItem inventoryItem = shoppingCartItem.getInventoryItem(); 
 			int quantity = shoppingCartItem.getQuantity();
 			cl.charge(inventoryItem.getPrice(), quantity);
@@ -44,14 +44,15 @@ public class ScannerImpl implements Scanner {
 			Special special = specials.get(inventoryItem);
 			if (special != null) {
 				Discount d = special.computeDiscount(quantity);
-				cl.applyDiscount(d.getDiscountedPrice());
-				remaining.add(new ItemImpl(shoppingCartItem.getInventoryItem(), d.getNonDiscountedItems()));
+				cl.applyDiscount(d.getDiscountedValue());
+				if (d.getNonDiscountedItems() > 0) {
+					fullPriceItems.add(new ItemImpl(shoppingCartItem.getInventoryItem(), d.getNonDiscountedItems()));
+				}
 			}
-			
 		}
-//		if (mis != null) {
-//			cl.applyDiscount(mis.computeDiscount(remaining));
-//		}
+		if (multiItemSpecial != null) {
+			cl.applyDiscount(multiItemSpecial.computeDiscount(fullPriceItems));
+		}
 		return cl;
 	}
 	

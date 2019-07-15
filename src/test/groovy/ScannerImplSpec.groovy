@@ -17,7 +17,7 @@
 import com.zonelynux.peoplefluent.*
 import com.zonelynux.peoplefluent.special.BuyOneGetOneFreeSpecial
 import com.zonelynux.peoplefluent.special.ThreeForThePriceOfTwoSpecial
-import com.zonelynux.peoplefluent.special.MultiItemSpecialImpl
+import com.zonelynux.peoplefluent.special.ExtraAppleAndBananaMultiItemSpecialImpl
 
 import spock.lang.Specification
 
@@ -28,11 +28,10 @@ class ScannerImplSpec extends Specification {
 	def bogoApple = new BuyOneGetOneFreeSpecial()
 	def bogoBanana = new BuyOneGetOneFreeSpecial()
 	def tfpotOrange = new ThreeForThePriceOfTwoSpecial()
-	def mis = new MultiItemSpecialImpl()
+	def mis = new ExtraAppleAndBananaMultiItemSpecialImpl()
 	def currencySymbol
 	
 	def setup() {
-		scanner = new ScannerImpl()
 		scanner.setLocale(Locale.UK)
 		bogoApple.setInventoryItem(InventoryItem.APPLE)
 		bogoBanana.setInventoryItem(InventoryItem.BANANA)
@@ -218,7 +217,7 @@ class ScannerImplSpec extends Specification {
 		  scanner.addSpecial(bogoBanana);
 		  
 		then:
-		  scanner.checkout(cart).displayBalance() == currencySymbol + "1.65"; // Three apples, one orange
+		  scanner.checkout(cart).displayBalance() == currencySymbol + "1.65";
 	}
 	
 	def "Buy 3 apples and 2 bananas and 1 orange and apply both BOGO specials and multi special"() {
@@ -231,7 +230,7 @@ class ScannerImplSpec extends Specification {
 		  scanner.setMultiItemSpecial(mis)
 		  
 		then:
-		  scanner.checkout(cart).displayBalance() == currencySymbol + "1.65"; // Three apples, one orange
+		  scanner.checkout(cart).displayBalance() == currencySymbol + "1.65";
 	}
 	
 	def "Buy 3 apples and 3 bananas and 1 orange and apply both BOGO specials and multi special"() {
@@ -244,6 +243,6 @@ class ScannerImplSpec extends Specification {
 		  scanner.setMultiItemSpecial(mis)
 		  
 		then:
-		  scanner.checkout(cart).displayBalance() == currencySymbol + "1.25"; // Three apples, one orange
+		  scanner.checkout(cart).displayBalance() == currencySymbol + "1.25";
 	}
 }  

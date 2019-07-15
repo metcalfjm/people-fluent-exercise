@@ -12,7 +12,7 @@ public class ThreeForThePriceOfTwoSpecial extends InventoryItemSpecial {
 		InventoryItem item = assertInventoryItem();
 		float price = item.getPrice();
 		int multiple = quantity/3;
-		discount.setDiscountedPrice(price * multiple);
+		discount.setDiscountedValue(price * multiple);
 		discount.setNonDiscountedItems(quantity%2);
 		return discount;
 	}

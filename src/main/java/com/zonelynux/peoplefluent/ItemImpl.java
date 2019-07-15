@@ -1,7 +1,5 @@
 package com.zonelynux.peoplefluent;
 
-import com.zonelynux.peoplefluent.ShoppingCart.Item;
-
 public class ItemImpl implements Item {
 	private InventoryItem item;
 	private int quantity;

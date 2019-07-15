@@ -9,28 +9,28 @@ public class ShoppingCartImpl implements ShoppingCart {
 	private Map<InventoryItem, Integer> items = new TreeMap<>();
 	
 	@Override
-	public int addItems(InventoryItem item, int quantity) {
+	public int addItems(InventoryItem inventoryItem, int quantity) {
 		if (quantity <= 0) {
 			throw new IllegalArgumentException("The quantity must be > 0");
 		}
-		Integer q = items.getOrDefault(item, 0);
-		items.put(item, q + quantity);
+		Integer q = items.getOrDefault(inventoryItem, 0);
+		items.put(inventoryItem, q + quantity);
 		return q + quantity;
 	}
 	
 	@Override
-	public int removeItems(InventoryItem item, int quantity) {
+	public int removeItems(InventoryItem inventoryItem, int quantity) {
 		if (quantity <= 0) {
 			throw new IllegalArgumentException("The quantity must be > 0");
 		}
-		Integer q = items.get(item);
+		Integer q = items.get(inventoryItem);
 		if (q != null) {
 			if (q > quantity) {
-				items.put(item, q - quantity);
+				items.put(inventoryItem, q - quantity);
 				return q - quantity;
 			}
 			else {
-				items.remove(item);
+				items.remove(inventoryItem);
 			}
 		}
 		return 0;

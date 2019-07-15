@@ -2,10 +2,10 @@ package com.zonelynux.peoplefluent;
 
 public class DiscountImpl implements Discount {
 
-	private float discountedPrice;
+	private float discountedValue;
 	
-	public void setDiscountedPrice(float discountedPrice) {
-		this.discountedPrice = discountedPrice;
+	public void setDiscountedValue(float discountedValue) {
+		this.discountedValue = discountedValue;
 	}
 
 	private int nonDiscountedItems;
@@ -15,15 +15,13 @@ public class DiscountImpl implements Discount {
 	}
 
 	@Override
-	public float getDiscountedPrice() {
-		// TODO Auto-generated method stub
-		return 0;
+	public float getDiscountedValue() {
+		return discountedValue;
 	}
 
 	@Override
 	public int getNonDiscountedItems() {
-		// TODO Auto-generated method stub
-		return 0;
+		return nonDiscountedItems;
 	}
 
 }
